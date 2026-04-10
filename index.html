@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Sheila's Kangaroo Math">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#FF69B4">
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <title>Sheila's Kangaroo Math</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── ROTATE OVERLAY (portrait mode) ────────────────────────────── -->
+  <div id="rotate-overlay">
+    <div class="rotate-content">
+      <div class="rotate-kangaroo">🦘</div>
+      <h2>Please rotate your iPad!</h2>
+      <p>This app works best in landscape mode.</p>
+      <div class="rotate-icon">↻</div>
+    </div>
+  </div>
+
+  <!-- ── MAIN APP ───────────────────────────────────────────────────── -->
+  <div id="app">
+
+    <!-- ── DECORATIVE BACKGROUND ELEMENTS ─────────────────────────── -->
+    <div class="bg-decor" aria-hidden="true">
+      <div class="rainbow-corner">
+        <svg viewBox="0 0 260 260" xmlns="http://www.w3.org/2000/svg">
+          <path d="M 0 240 A 240 240 0 0 1 240 0" stroke="#FF4444" stroke-width="14" fill="none" stroke-linecap="round"/>
+          <path d="M 0 210 A 210 210 0 0 1 210 0" stroke="#FF8800" stroke-width="13" fill="none" stroke-linecap="round"/>
+          <path d="M 0 180 A 180 180 0 0 1 180 0" stroke="#FFD700" stroke-width="13" fill="none" stroke-linecap="round"/>
+          <path d="M 0 150 A 150 150 0 0 1 150 0" stroke="#44CC44" stroke-width="13" fill="none" stroke-linecap="round"/>
+          <path d="M 0 120 A 120 120 0 0 1 120 0" stroke="#4488FF" stroke-width="13" fill="none" stroke-linecap="round"/>
+          <path d="M 0 90  A 90  90  0 0 1 90  0" stroke="#AA44FF" stroke-width="13" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="star-bg star-b1">⭐</span>
+      <span class="star-bg star-b2">✨</span>
+      <span class="star-bg star-b3">💫</span>
+      <span class="heart-bg heart-b1">♥</span>
+      <span class="heart-bg heart-b2">♥</span>
+    </div>
+
+    <!-- ── HEADER ─────────────────────────────────────────────────── -->
+    <header id="header">
+      <div class="header-left">
+        <span class="logo-emoji">🦘</span>
+        <span class="logo-text">Sheila's Kangaroo Math</span>
+      </div>
+      <div class="header-stats">
+        <div class="stat-chip stars-chip">
+          <span>⭐</span>
+          <span id="stars-count">0</span>
+        </div>
+        <div class="stat-chip streak-chip">
+          <span>🔥</span>
+          <span id="streak-count">0</span>
+          <span class="stat-label">days</span>
+        </div>
+        <button id="mute-btn" class="mute-btn" title="Toggle sound" aria-label="Toggle sound">🔇</button>
+      </div>
+    </header>
+
+    <!-- ── SCREENS ────────────────────────────────────────────────── -->
+    <main id="main-content">
+
+      <!-- ── WELCOME SCREEN ──────────────────────────────────────── -->
+      <section id="screen-welcome" class="screen active">
+        <div class="welcome-layout">
+          <div class="welcome-left">
+            <div class="welcome-mascot" id="welcome-mascot">
+              <div id="kangaroo-welcome" class="kangaroo-svg bounce"></div>
+            </div>
+          </div>
+          <div class="welcome-right">
+            <h1 class="welcome-title">Hello, Math Star! ⭐</h1>
+            <p class="welcome-subtitle">Ready for today's math adventure?</p>
+
+            <div class="progress-section">
+              <div class="progress-label">
+                <span>Journey Progress</span>
+                <span id="progress-fraction">0 / 200</span>
+              </div>
+              <div class="progress-track">
+                <div id="progress-bar" class="progress-fill" style="width:0%"></div>
+                <div id="progress-roo" class="progress-kangaroo">🦘</div>
+              </div>
+              <div class="progress-milestones">
+                <span>Start</span>
+                <span>25%</span>
+                <span>50%</span>
+                <span>75%</span>
+                <span>Finish!</span>
+              </div>
+            </div>
+
+            <button id="start-btn" class="btn-primary">
+              <span>Let's Practice!</span>
+              <span class="btn-emoji">🚀</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── ALREADY DONE TODAY SCREEN ──────────────────────────── -->
+      <section id="screen-done-today" class="screen">
+        <div class="done-layout">
+          <div class="done-mascot">
+            <div id="kangaroo-done" class="kangaroo-svg wave"></div>
+          </div>
+          <div class="done-content">
+            <div class="done-result" id="done-result">
+              <!-- Filled by JS: trophy or stars -->
+            </div>
+            <h2 id="done-title">Amazing job today!</h2>
+            <p id="done-message">You completed today's practice!</p>
+            <div class="done-streak-banner">
+              <span>🔥 Current Streak:</span>
+              <span id="done-streak" class="streak-number">0</span>
+              <span>days</span>
+            </div>
+
+            <div class="progress-section">
+              <div class="progress-label">
+                <span>Journey Progress</span>
+                <span id="done-progress-fraction">0 / 200</span>
+              </div>
+              <div class="progress-track">
+                <div id="done-progress-bar" class="progress-fill" style="width:0%"></div>
+                <div class="progress-kangaroo">🦘</div>
+              </div>
+            </div>
+
+            <p class="comeback-message">See you tomorrow! 🌈</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ── QUESTION SCREEN ────────────────────────────────────── -->
+      <section id="screen-question" class="screen">
+        <div class="question-layout">
+
+          <!-- Left panel: question + options -->
+          <div class="question-panel">
+            <div class="question-meta">
+              <span class="q-progress" id="q-progress">Question 1 of 2</span>
+              <span class="q-topic" id="q-topic">Topic</span>
+              <span class="q-timer" id="q-timer">⏱ 0:00</span>
+            </div>
+
+            <div class="question-card">
+              <p class="question-text" id="question-text">Loading...</p>
+              <button id="read-btn" class="read-btn" title="Read question aloud" aria-label="Read question aloud">🔊</button>
+            </div>
+
+            <div class="options-grid" id="options-grid">
+              <button class="option-btn" data-index="0">
+                <span class="option-letter">A</span>
+                <span class="option-text" id="opt-0"></span>
+              </button>
+              <button class="option-btn" data-index="1">
+                <span class="option-letter">B</span>
+                <span class="option-text" id="opt-1"></span>
+              </button>
+              <button class="option-btn" data-index="2">
+                <span class="option-letter">C</span>
+                <span class="option-text" id="opt-2"></span>
+              </button>
+              <button class="option-btn" data-index="3">
+                <span class="option-letter">D</span>
+                <span class="option-text" id="opt-3"></span>
+              </button>
+            </div>
+
+            <!-- Feedback (shown after answer) -->
+            <div id="feedback-panel" class="feedback-panel hidden">
+              <div class="feedback-header" id="feedback-header">
+                <!-- ✅ or ❌ + message -->
+              </div>
+              <div class="explanation-box" id="explanation-text">
+                <!-- Explanation text -->
+              </div>
+              <button id="next-btn" class="btn-next">
+                <span id="next-btn-text">Next Question →</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Right panel: mascot -->
+          <div class="mascot-panel">
+            <div id="kangaroo-question" class="kangaroo-svg" id="mascot-q"></div>
+            <div class="mascot-decorations" aria-hidden="true">
+              <span class="deco-star deco-1">⭐</span>
+              <span class="deco-star deco-2">✨</span>
+              <span class="deco-heart deco-3">♥</span>
+              <span class="deco-star deco-4">💫</span>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── DAY COMPLETE SCREEN ────────────────────────────────── -->
+      <section id="screen-complete" class="screen">
+        <div class="complete-layout">
+          <div class="complete-mascot">
+            <div id="kangaroo-complete" class="kangaroo-svg jump"></div>
+          </div>
+          <div class="complete-content">
+            <div id="complete-trophy" class="complete-trophy-area">
+              <!-- Trophy or stars, filled by JS -->
+            </div>
+            <h2 id="complete-title" class="complete-title">Amazing!</h2>
+            <p id="complete-message" class="complete-message"></p>
+
+            <div class="complete-stars-earned">
+              <span id="stars-earned-display"></span>
+            </div>
+
+            <div class="done-streak-banner">
+              <span>🔥 Streak:</span>
+              <span id="complete-streak" class="streak-number">0</span>
+              <span>days</span>
+            </div>
+
+            <div class="progress-section" style="margin-top:1rem">
+              <div class="progress-label">
+                <span>Journey Progress</span>
+                <span id="complete-progress-fraction">0 / 200</span>
+              </div>
+              <div class="progress-track">
+                <div id="complete-progress-bar" class="progress-fill" style="width:0%"></div>
+                <div class="progress-kangaroo">🦘</div>
+              </div>
+            </div>
+
+            <p class="comeback-message">See you tomorrow! 🌟</p>
+          </div>
+        </div>
+
+        <!-- Confetti container -->
+        <div id="confetti-container" aria-hidden="true"></div>
+      </section>
+
+    </main>
+  </div><!-- #app -->
+
+  <!-- ── CORRECT ANSWER TOAST ──────────────────────────────────────── -->
+  <div id="correct-toast" aria-live="polite"></div>
+
+  <!-- ── FLOATING PARTICLES CONTAINER ──────────────────────────────── -->
+  <div id="particles" aria-hidden="true"></div>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
