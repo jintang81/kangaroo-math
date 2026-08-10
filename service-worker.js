@@ -1,4 +1,4 @@
-const CACHE_NAME = 'math-kangaroo-v1';
+const CACHE_NAME = 'math-kangaroo-v2';
 const ASSETS = [
   '/',
   '/index.html',
