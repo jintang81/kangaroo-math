@@ -14,7 +14,7 @@ let state = {
   questionsDone:   [],        // IDs seen so far (resets after all 200)
   todayDone:       false,
   todayCorrect:    0,         // first-attempt correct count today
-  todayQuestions:  null,      // [id1, id2]
+  todayQuestions:  null,      // [id1, id2, id3, id4, id5]
 };
 
 // Session (not persisted)
@@ -75,18 +75,18 @@ function getUnseenQuestions() {
 
 function pickTodayQuestions() {
   let pool = getUnseenQuestions();
-  if (pool.length < 2) {
+  if (pool.length < 5) {
     // All 200 done — reset cycle
     state.questionsDone = [];
     saveState();
     pool = [...QUESTIONS];
   }
-  // Fisher-Yates shuffle, take first 2
+  // Fisher-Yates shuffle, take first 5
   for (let i = pool.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
     [pool[i], pool[j]] = [pool[j], pool[i]];
   }
-  return [pool[0].id, pool[1].id];
+  return pool.slice(0, 5).map(q => q.id);
 }
 
 function getQuestion(id) {
@@ -418,7 +418,7 @@ function renderQuestion(questionId, qIndex) {
 
   // Meta
   document.getElementById('q-progress').textContent =
-    `Question ${qIndex + 1} of 2`;
+    `Question ${qIndex + 1} of 5`;
   document.getElementById('q-topic').textContent = q.topic;
   document.getElementById('q-timer').textContent = '⏱ 0:00';
 
@@ -529,7 +529,7 @@ function showFeedback(isCorrect, q) {
   expl.textContent = `💡 ${q.explanation}`;
 
   // Next button text
-  const isLastQ = session.currentQIndex === 1;
+  const isLastQ = session.currentQIndex === state.todayQuestions.length - 1;
   nextBtnText.textContent = isLastQ ? 'See Results 🎉' : 'Next Question →';
 
   // Next button handler (one-time)
@@ -538,11 +538,11 @@ function showFeedback(isCorrect, q) {
 
 // ── NEXT QUESTION ──────────────────────────────────────────────
 function nextQuestion() {
-  session.currentQIndex = 1;
+  session.currentQIndex++;
   // Kangaroo back to idle
   const roo = document.getElementById('kangaroo-question');
   if (roo) roo.className = 'kangaroo-svg idle';
-  renderQuestion(state.todayQuestions[1], 1);
+  renderQuestion(state.todayQuestions[session.currentQIndex], session.currentQIndex);
 }
 
 // ── FINISH DAY ─────────────────────────────────────────────────
@@ -550,7 +550,7 @@ function finishDay() {
   stopTimer();
 
   const today = todayStr();
-  const bothdone = session.firstAttempts[0] && session.firstAttempts[1];
+  const bothdone = session.firstAttempts.every(Boolean);
 
   // Count today correct (stars earned this session)
   const starsEarned = session.firstAttempts.filter(Boolean).length;
@@ -592,7 +592,7 @@ function showCompleteScreen(perfect, starsEarned) {
   if (perfect) {
     trophyEl.innerHTML = '<span style="font-size:5rem; display:inline-block; animation: trophyBounce 0.8s cubic-bezier(0.34,1.56,0.64,1) both">🏆</span>';
     titleEl.textContent  = 'Perfect Score! 🎉';
-    msgEl.textContent    = 'You got BOTH questions right on your first try! You are a Math Star!';
+    msgEl.textContent    = 'You got ALL 5 questions right on your first try! You are a Math Star!';
     Audio.trophy();
     setTimeout(launchConfetti, 300);
     setTimeout(() => speakMsg('Perfect! You are a Math Star!'), 400);
@@ -637,10 +637,10 @@ function showDoneTodayScreen() {
   const msgEl     = document.getElementById('done-message');
   const streakEl  = document.getElementById('done-streak');
 
-  if (state.todayCorrect === 2) {
+  if (state.todayCorrect === 5) {
     resultEl.textContent = '🏆';
     titleEl.textContent  = 'Amazing! You did it!';
-    msgEl.textContent    = 'You got both questions right today! Come back tomorrow!';
+    msgEl.textContent    = 'You got all 5 questions right today! Come back tomorrow!';
   } else if (state.todayCorrect === 1) {
     resultEl.textContent = '⭐';
     titleEl.textContent  = 'Great effort today!';
@@ -707,7 +707,7 @@ function startPractice() {
   }
 
   session.currentQIndex   = 0;
-  session.firstAttempts   = [true, true];
+  session.firstAttempts   = [true, true, true, true, true];
   session.firstAttempt    = true;
 
   renderQuestion(state.todayQuestions[0], 0);
